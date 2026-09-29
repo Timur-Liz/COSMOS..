@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#14051f">
+  <meta name="description" content="Она — Космос. За пределами возможного: истории белорусских женщин и навигатор поступления. Год белорусской женщины.">
+  <title>Она — Космос: Белорусский след во Вселенной</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      --bg: #12041c;
+      --cyan: #7af0ff;
+      --gold: #ffd56a;
+      --violet: #c9a6ff;
+      --pink: #ff7ac8;
+      --mint: #5ef0c2;
+      --orange: #ff9f5a;
+      --lime: #c6f25a;
+      --rose: #ff8fab;
+      --blue: #6ea8ff;
+      --text: #f4f1ff;
+      --muted: #b7a8d4;
+      --nav-h: 72px;
+      --font-d: "Orbitron", "Segoe UI", sans-serif;
+      --font-b: "Manrope", system-ui, sans-serif;
+      --font-s: "Cormorant Garamond", Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: var(--font-b);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+      background:
+        radial-gradient(900px 600px at 8% -10%, rgba(255, 90, 180, .28), transparent 55%),
+        radial-gradient(800px 520px at 100% 18%, rgba(80, 140, 255, .28), transparent 50%),
+        radial-gradient(720px 520px at 70% 100%, rgba(255, 170, 60, .18), transparent 50%),
+        radial-gradient(600px 400px at 0% 80%, rgba(80, 255, 190, .12), transparent 50%),
+        #12041c;
+    }
+    body.locked { overflow: hidden; }
+    @media (hover: hover) and (pointer: fine) {
+      body.cursor-on, body.cursor-on * { cursor: none !important; }
+    }
+    ::selection { background: rgba(255, 122, 200, .35); color: #fff; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #12041c; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--pink), var(--gold), var(--cyan));
+      border-radius: 8px;
+    }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { background: none; border: none; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    svg { max-width: 100%; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .relative { position: relative; }
+    .z-10 { z-index: 10; }
+
+    #starsBg, #cursorCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    #starsBg { z-index: 0; }
+    #cursorCanvas { z-index: 10000; }
+
+    .nebula {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+      filter: blur(70px); mix-blend-mode: screen; animation: floaty 18s ease-in-out infinite;
+    }
+    .n1 { width: 52vw; height: 52vw; background: #ff4d9a; opacity: .32; top: -16%; left: -14%; }
+    .n2 { width: 42vw; height: 42vw; background: #4d7cff; opacity: .34; top: 28%; right: -14%; animation-delay: -4s; }
+    .n3 { width: 38vw; height: 38vw; background: #ffb347; opacity: .22; bottom: -12%; left: 28%; animation-delay: -8s; }
+    .n4 { width: 28vw; height: 28vw; background: #5ef0c2; opacity: .18; top: 55%; left: -8%; animation-delay: -2s; }
+    .n5 { width: 24vw; height: 24vw; background: #c9a6ff; opacity: .22; top: 8%; left: 48%; animation-delay: -11s; }
+    @keyframes floaty {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(28px, -24px) scale(1.08); }
+    }
+    .vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      background: radial-gradient(ellipse at center, transparent 38%, rgba(12, 3, 20, .62) 100%);
+    }
+    .content { position: relative; z-index: 3; }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 24px 60px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.16);
+      border-radius: 24px;
+    }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; } .d3 { transition-delay: .32s; } .d4 { transition-delay: .44s; }
+
+    #preloader {
+      position: fixed; inset: 0; z-index: 20000; background: #16051f;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+    #preloader.off { opacity: 0; visibility: hidden; pointer-events: none; }
+    #warpCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .pre-inner { position: relative; z-index: 1; text-align: center; padding: 24px; }
+    .pre-logo {
+      font-family: var(--font-d); font-size: clamp(1.6rem, 5vw, 3rem); letter-spacing: .18em; color: #fff;
+      text-shadow: 0 0 18px var(--pink), 0 0 40px var(--cyan), 0 0 70px var(--gold);
+    }
+    .pre-sub { margin-top: 14px; color: var(--muted); letter-spacing: .32em; text-transform: uppercase; font-size: .72rem; }
+    .pre-bar { width: min(280px, 70vw); height: 3px; margin: 28px auto 0; background: rgba(255,255,255,.12); overflow: hidden; border-radius: 4px; }
+    .pre-bar-fill {
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--pink), var(--gold), var(--mint), var(--cyan));
+      box-shadow: 0 0 12px var(--pink); animation: loadBar 2.6s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes loadBar { to { width: 100%; } }
+    .pre-skip { margin-top: 28px; color: var(--muted); font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; opacity: .75; }
+    .pre-skip:hover { color: var(--gold); opacity: 1; }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+      background: linear-gradient(180deg, rgba(18,4,28,.82), rgba(18,4,28,.15) 75%, transparent);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .logo { font-family: var(--font-d); font-size: .82rem; letter-spacing: .2em; color: #fff; text-shadow: 0 0 16px var(--pink); display: inline-flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--gold); }
+    .logo-mark { width: 28px; height: 28px; flex: 0 0 28px; display: block; filter: drop-shadow(0 0 8px rgba(255, 213, 106, .55)); }
+    .nav-links { display: none; gap: 22px; align-items: center; }
+    @media (min-width: 920px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); position: relative;
+    }
+    .nav-links a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0; border-radius: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width .3s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14);
+      display: grid; place-items: center; color: var(--gold); transition: .25s;
+    }
+    .icon-btn:hover { box-shadow: 0 0 18px rgba(255, 213, 106, .25); background: rgba(255, 213, 106, .1); }
+    .burger { display: grid; gap: 5px; place-content: center; place-items: center; }
+    @media (min-width: 920px) { .burger { display: none; } }
+    .burger span { display: block; width: 18px; height: 1.5px; background: #fff; transition: .25s; }
+    .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 49; background: rgba(20, 6, 32, .96); backdrop-filter: blur(18px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      transform: translateY(-110%); transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+    .mobile-menu.open { transform: none; }
+    .mobile-menu a { font-family: var(--font-d); font-size: 1.25rem; letter-spacing: .16em; text-transform: uppercase; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .hero {
+      min-height: 100svh; display: grid; place-items: center; text-align: center;
+      padding: calc(var(--nav-h) + 24px) 20px 80px; position: relative; overflow: hidden;
+    }
+    .hero-year {
+      position: absolute; font-family: var(--font-d); font-weight: 800;
+      font-size: clamp(5rem, 28vw, 22rem); opacity: .07; letter-spacing: -.06em;
+      user-select: none; pointer-events: none; top: 46%; left: 50%; transform: translate(-50%, -50%);
+      background: linear-gradient(90deg, #ff7ac8, #ffd56a, #7af0ff); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .orbit-wrap { position: absolute; width: min(82vw, 720px); aspect-ratio: 1; pointer-events: none; perspective: 800px; }
+    .orbit { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(255, 122, 200, .2); transform: rotateX(68deg); animation: spin 48s linear infinite; }
+    .orbit:nth-child(2) { inset: 8%; border-color: rgba(255, 213, 106, .2); animation-duration: 36s; animation-direction: reverse; }
+    .orbit:nth-child(3) { inset: 18%; border-color: rgba(94, 240, 194, .18); animation-duration: 64s; }
+    .orbit i { position: absolute; top: -4px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 14px var(--gold); }
+    .orbit:nth-child(2) i { background: var(--pink); box-shadow: 0 0 14px var(--pink); }
+    .orbit:nth-child(3) i { background: var(--mint); box-shadow: 0 0 14px var(--mint); width: 6px; height: 6px; }
+    @keyframes spin { to { transform: rotateX(68deg) rotateZ(360deg); } }
+    .kicker { font-size: .68rem; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); text-shadow: 0 0 12px rgba(255, 213, 106, .5); }
+    .hero-title {
+      font-family: var(--font-d); font-weight: 800; line-height: .95;
+      font-size: clamp(2.35rem, 9vw, 6.6rem); letter-spacing: .04em; margin: 18px 0 16px;
+      text-shadow: 0 0 24px rgba(255, 122, 200, .55), 0 0 48px rgba(122, 240, 255, .35), 0 0 80px rgba(255, 213, 106, .25);
+    }
+    .hero-sub { max-width: 640px; margin: 0 auto 32px; color: #ddd0f0; font-size: clamp(.95rem, 2vw, 1.15rem); }
+    .glitch { position: relative; display: inline-block; }
+    .glitch::before, .glitch::after { content: attr(data-text); position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+    .glitch:hover::before, .glitch.glitching::before { opacity: .85; color: var(--cyan); animation: g1 .28s infinite linear alternate-reverse; }
+    .glitch:hover::after, .glitch.glitching::after { opacity: .85; color: var(--pink); animation: g2 .22s infinite linear alternate-reverse; }
+    @keyframes g1 { 0% { clip-path: inset(12% 0 68% 0); transform: translate(-4px, -1px); } 100% { clip-path: inset(62% 0 8% 0); transform: translate(4px, 1px); } }
+    @keyframes g2 { 0% { clip-path: inset(48% 0 22% 0); transform: translate(3px, 1px); } 100% { clip-path: inset(8% 0 70% 0); transform: translate(-3px, -1px); } }
+
+    .btn-neon {
+      display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px;
+      border: 1px solid rgba(255, 122, 200, .5); background: linear-gradient(90deg, rgba(255,122,200,.16), rgba(122,240,255,.12));
+      color: #fff; font-family: var(--font-d); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(255, 122, 200, .8); box-shadow: 0 0 22px rgba(255, 122, 200, .22); transition: .3s;
+    }
+    .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(255, 213, 106, .35); }
+    .btn-gold { border-color: rgba(255, 213, 106, .5); background: rgba(255, 213, 106, .12); color: var(--gold); text-shadow: 0 0 12px rgba(255,213,106,.7); }
+    .scroll-hint { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; }
+    .scroll-hint b { width: 1px; height: 42px; display: block; overflow: hidden; background: rgba(255,255,255,.12); position: relative; }
+    .scroll-hint b::after { content: ""; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: linear-gradient(var(--pink), var(--gold)); animation: drop 1.8s ease-in-out infinite; }
+    @keyframes drop { 0% { top: -100%; } 100% { top: 100%; } }
+
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
+    @media (min-width: 800px) { .stats { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+    .stat { padding: 22px 16px; text-align: center; }
+    .stat:nth-child(1) .stat-n { color: var(--cyan); text-shadow: 0 0 18px rgba(122,240,255,.5); }
+    .stat:nth-child(2) .stat-n { color: var(--pink); text-shadow: 0 0 18px rgba(255,122,200,.5); }
+    .stat:nth-child(3) .stat-n { color: var(--gold); text-shadow: 0 0 18px rgba(255,213,106,.5); }
+    .stat:nth-child(4) .stat-n { color: var(--mint); text-shadow: 0 0 18px rgba(94,240,194,.5); }
+    .stat-n { font-family: var(--font-d); font-size: clamp(1.4rem, 3vw, 2rem); }
+    .stat-l { font-size: .75rem; color: var(--muted); margin-top: 6px; }
+
+    section { padding: 72px 20px; }
+    @media (min-width: 768px) { section { padding: 110px 32px; } }
+    .wrap { max-width: 1140px; margin: 0 auto; }
+    .sec-num { font-family: var(--font-d); font-size: .7rem; letter-spacing: .28em; color: var(--gold); margin-bottom: 10px; }
+    .sec-title { font-family: var(--font-d); font-size: clamp(1.35rem, 4vw, 2.45rem); letter-spacing: .06em; }
+    .sec-lead { max-width: 680px; color: var(--muted); margin: 14px 0 36px; }
+
+    @keyframes pulseGlow { 0%, 100% { opacity: .28; } 50% { opacity: .75; } }
+    .orrery-stage {
+      position: relative; width: min(100%, 720px); aspect-ratio: 1; max-height: 78vh;
+      margin: 0 auto; overflow: hidden;
+    }
+    .sun {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: clamp(84px, 18vw, 120px); height: clamp(84px, 18vw, 120px); border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #fff7d1, #ffb347 42%, #ff4d9a 78%);
+      box-shadow: 0 0 30px rgba(255,122,200,.7), 0 0 70px rgba(255,213,106,.35);
+      display: grid; place-items: center; text-align: center; z-index: 6; pointer-events: none;
+      font-family: var(--font-d); font-size: .62rem; letter-spacing: .14em;
+    }
+    .sun span { display: block; font-size: .7rem; color: #3a1020; }
+    .ring-wrap {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      border-radius: 50%; border: 1px dashed rgba(255,255,255,.16);
+    }
+    .r1 { width: 36%; height: 36%; }
+    .r2 { width: 52%; height: 52%; }
+    .r3 { width: 66%; height: 66%; }
+    .r4 { width: 80%; height: 80%; }
+    .r5 { width: 94%; height: 94%; }
+    .ring-spin { width: 100%; height: 100%; position: relative; animation: orrery var(--t, 30s) linear infinite; }
+    .planet {
+      position: absolute; top: 0; left: 50%; width: 86px; margin-left: -43px; margin-top: -38px;
+      background: none; border: 0; z-index: 4;
+    }
+    .planet-face { display: flex; flex-direction: column; align-items: center; animation: unspin var(--t, 30s) linear infinite; }
+    .planet-core {
+      width: 22px; height: 22px; border-radius: 50%; background: var(--c);
+      box-shadow: 0 0 16px var(--c), 0 0 36px var(--c); margin-bottom: 6px;
+      animation: pulseGlow 2.6s ease-in-out infinite;
+    }
+    .planet b { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; font-family: var(--font-d); font-weight: 600; }
+    .planet em { font-style: normal; font-size: .68rem; color: var(--muted); }
+    .planet:hover .planet-core, .planet:focus .planet-core { transform: scale(1.25); }
+    .orrery-stage:hover .ring-spin, .orrery-stage:hover .planet-face { animation-play-state: paused; }
+    @keyframes orrery { to { transform: rotate(360deg); } }
+    @keyframes unspin { to { transform: rotate(-360deg); } }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+    .legend button {
+      font-size: .75rem; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.05);
+    }
+    .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; box-shadow: 0 0 8px var(--c); }
+    .galaxy-mobile { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 2px 14px; -webkit-overflow-scrolling: touch; }
+    @media (min-width: 860px) { .galaxy-mobile { display: none; } }
+    .star-card {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+      text-align: left; padding: 16px 18px; min-width: min(78vw, 320px); scroll-snap-align: start; flex: 0 0 auto;
+    }
+    .orb { width: 18px; height: 18px; border-radius: 50%; background: var(--c, var(--cyan)); box-shadow: 0 0 14px var(--c), 0 0 30px var(--c); animation: pulseGlow 2.4s ease-in-out infinite; }
+    .star-card small { display: block; font-family: var(--font-d); font-size: .62rem; letter-spacing: .16em; color: var(--gold); }
+    .star-card b { font-weight: 600; display: block; }
+    .star-card em { color: var(--muted); font-style: normal; font-size: .8rem; display: block; }
+    .hidden { display: none !important; }
+
+    .modal {
+      position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 20px;
+      background: rgba(12, 3, 22, .72); backdrop-filter: blur(10px);
+    }
+    .modal.open { display: flex; }
+    .modal-card { width: min(760px, 100%); max-height: min(88vh, 900px); overflow: auto; padding: 28px 24px; position: relative; animation: modalIn .45s cubic-bezier(.22,1,.36,1); }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(.98); } to { opacity: 1; transform: none; } }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.14); color: #fff; font-size: 1.4rem; line-height: 1; display: grid; place-items: center;
+    }
+    .modal-close:hover { color: var(--gold); }
+    .modal-grid { display: grid; gap: 22px; }
+    @media (min-width: 700px) { .modal-grid { grid-template-columns: 220px 1fr; align-items: start; } .modal-card { padding: 36px; } }
+    .portrait { width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 0 40px rgba(255,122,200,.25); overflow: hidden; }
+    .badge { display: inline-block; font-family: var(--font-d); font-size: .62rem; letter-spacing: .16em; color: var(--gold); border: 1px solid rgba(255,213,106,.4); padding: 4px 10px; border-radius: 999px; margin-bottom: 8px; }
+    .modal h3 { font-family: var(--font-d); font-size: clamp(1.15rem, 3vw, 1.6rem); letter-spacing: .04em; margin-bottom: 6px; }
+    .quote { font-family: var(--font-s); font-style: italic; font-size: 1.25rem; color: var(--gold); border-left: 2px solid var(--pink); padding-left: 14px; margin: 16px 0; line-height: 1.4; }
+    .contrib { margin-top: 12px; padding: 14px; border-radius: 14px; background: rgba(255,122,200,.08); border: 1px solid rgba(255,122,200,.16); font-size: .92rem; }
+    .uni-list { margin: 12px 0 0; padding-left: 18px; color: #efe6ff; }
+    .uni-list li { margin: 6px 0; }
+
+    .quiz-card { padding: 28px 20px; min-height: 340px; }
+    @media (min-width: 700px) { .quiz-card { padding: 40px; } }
+    .q-progress { display: flex; gap: 8px; margin-bottom: 22px; }
+    .q-progress i { flex: 1; height: 4px; background: rgba(255,255,255,.1); border-radius: 4px; overflow: hidden; }
+    .q-progress i::after { content: ""; display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width .4s; }
+    .q-progress i.on::after { width: 100%; }
+    .q-title { font-family: var(--font-d); font-size: clamp(1.05rem, 2.5vw, 1.4rem); margin-bottom: 22px; letter-spacing: .03em; }
+    .q-opts { display: grid; gap: 10px; }
+    .q-opt { text-align: left; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); transition: .25s; }
+    .q-opt:hover { border-color: rgba(255,122,200,.5); background: rgba(255,122,200,.1); }
+    .q-opt.picked { border-color: var(--gold); box-shadow: 0 0 18px rgba(255,213,106,.22); }
+    .quiz-in { animation: qIn .45s cubic-bezier(.22,1,.36,1); }
+    @keyframes qIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    .result-k { font-family: var(--font-d); font-size: .7rem; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; }
+    .result-title { font-family: var(--font-d); font-size: clamp(1.2rem, 3vw, 1.85rem); margin: 8px 0 12px; }
+    .jobs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 10px; }
+    .job {
+      font-size: .8rem; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,122,200,.3);
+      color: #fff; background: rgba(255,122,200,.12); cursor: pointer; transition: .25s;
+    }
+    .job:hover { transform: translateY(-2px); background: rgba(255,213,106,.16); border-color: var(--gold); color: var(--gold); }
+
+    .plan-layout { display: grid; gap: 22px; }
+    @media (min-width: 900px) { .plan-layout { grid-template-columns: 340px 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field span { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 12px 14px; border-radius: 12px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); outline: none; min-height: 46px;
+    }
+    .field textarea { min-height: 110px; resize: vertical; }
+    .field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%), linear-gradient(135deg, var(--gold) 50%, transparent 50%); background-position: calc(100% - 18px) 22px, calc(100% - 12px) 22px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+    .field option { background: #2a1540; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,213,106,.14); }
+    #planForm, #dreamForm { padding: 26px 22px; }
+    .route-rail { display: flex; align-items: stretch; gap: 8px; }
+    .route-btn {
+      flex: 0 0 40px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05); color: var(--gold); font-size: 1.2rem;
+    }
+    .route-btn:hover { background: rgba(255,213,106,.12); }
+    .route-wrap {
+      overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; cursor: grab; flex: 1;
+      scrollbar-color: var(--gold) transparent; padding: 4px 2px 12px;
+      user-select: none; touch-action: pan-x;
+    }
+    #planOut { overflow: hidden; }
+    @media (max-width: 600px) {
+      .planet { width: 70px; margin-left: -35px; }
+      .planet em { display: none; }
+      .sun { font-size: .52rem; }
+    }
+    .foot-sky { padding-bottom: 22px; }
+    .route-wrap:active { cursor: grabbing; }
+    .route-wrap::-webkit-scrollbar { height: 8px; }
+    .route-wrap::-webkit-scrollbar-thumb { background: linear-gradient(90deg, var(--pink), var(--gold)); border-radius: 8px; }
+    .route { display: flex; gap: 14px; min-width: max-content; }
+    .station {
+      padding: 16px; border-radius: 18px; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1); position: relative;
+      flex: 0 0 min(78vw, 260px); scroll-snap-align: start;
+    }
+    .station i {
+      display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+      font-family: var(--font-d); font-size: .7rem; font-style: normal; margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--pink), var(--gold)); color: #2a1020;
+    }
+    .station h4 { font-size: .95rem; margin-bottom: 6px; }
+    .station p { font-size: .82rem; color: var(--muted); }
+    .uni-grid { display: grid; gap: 10px; margin-top: 16px; }
+    @media (min-width: 700px) { .uni-grid { grid-template-columns: 1fr 1fr; } }
+    .uni-card { padding: 14px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); }
+    .uni-card b { display: block; color: var(--gold); }
+    .uni-card small { color: var(--mint); letter-spacing: .08em; text-transform: uppercase; font-size: .68rem; }
+    .note { font-size: .78rem; color: var(--muted); margin-top: 14px; }
+    #planOut { min-height: 280px; padding: 22px; }
+    .plan-empty { color: var(--muted); text-align: center; padding: 40px 12px; }
+
+    .dream-layout { display: grid; gap: 22px; }
+    @media (min-width: 880px) { .dream-layout { grid-template-columns: 360px 1fr; } }
+    #dreamSky { position: relative; min-height: 360px; overflow: hidden; background: radial-gradient(circle at 30% 20%, rgba(255,122,200,.15), transparent 40%), radial-gradient(circle at 80% 70%, rgba(122,240,255,.12), transparent 42%); }
+    .dream-star { position: absolute; width: 14px; height: 14px; transform: translate(-50%, -50%); background: none; border: 0; }
+    .dream-star-core { display: block; width: 8px; height: 8px; margin: 3px auto 0; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor, 0 0 22px currentColor; }
+    .dream-star.born .dream-star-core { animation: born .9s cubic-bezier(.22,1,.36,1); }
+    @keyframes born { 0% { transform: scale(0); } 60% { transform: scale(1.8); } 100% { transform: scale(1); } }
+    .dream-tip {
+      position: absolute; left: 50%; bottom: 160%; transform: translateX(-50%) scale(.9); min-width: 160px; max-width: 220px;
+      padding: 10px 12px; border-radius: 12px; background: rgba(28, 10, 40, .94); border: 1px solid rgba(255,255,255,.12);
+      opacity: 0; pointer-events: none; transition: .25s; z-index: 2; text-align: left;
+    }
+    .dream-star:hover .dream-tip, .dream-star:focus .dream-tip { opacity: 1; transform: translateX(-50%) scale(1); }
+    .dream-tip strong { display: block; font-size: .8rem; color: var(--gold); }
+    .dream-tip em { font-style: normal; font-size: .75rem; color: var(--muted); }
+    .sky-count { position: absolute; left: 16px; bottom: 12px; font-size: .75rem; color: var(--muted); }
+
+    footer { border-top: 1px solid rgba(255,255,255,.1); padding: 56px 20px 24px; position: relative; z-index: 3; }
+    .foot-sky { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+    .foot-planet {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      min-width: 92px; padding: 12px 10px 10px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04);
+      color: var(--c, var(--gold)); transition: .25s;
+    }
+    .foot-planet svg { width: 28px; height: 28px; filter: drop-shadow(0 0 8px var(--c)); }
+    .foot-planet span {
+      font-family: var(--font-d); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    }
+    .foot-planet:hover { transform: translateY(-3px); border-color: var(--c); background: rgba(255,255,255,.08); }
+    .foot-quote {
+      font-family: var(--font-s); font-style: italic; font-size: clamp(1.35rem, 3.4vw, 2.1rem);
+      text-align: center; max-width: 780px; margin: 28px auto 32px; line-height: 1.35; color: #fff;
+      text-shadow: 0 0 24px rgba(255,122,200,.35);
+    }
+    .foot-missions { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 960px; margin: 0 auto 36px; }
+    @media (min-width: 760px) { .foot-missions { grid-template-columns: repeat(3, 1fr); } }
+    .foot-missions a {
+      display: block; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12); transition: .25s;
+    }
+    .foot-missions a:hover { transform: translateY(-3px); border-color: var(--gold); }
+    .foot-missions small { display: block; font-family: var(--font-d); font-size: .62rem; letter-spacing: .16em; color: var(--gold); margin-bottom: 6px; }
+    .foot-bar {
+      display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; align-items: center;
+      max-width: 1140px; margin: 0 auto; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.08);
+      color: var(--muted); font-size: .8rem;
+    }
+    .foot-bar a:hover { color: var(--gold); }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(28, 10, 40, .94); border: 1px solid rgba(255,213,106,.35); color: var(--gold);
+      padding: 12px 18px; border-radius: 999px; z-index: 90; opacity: 0; pointer-events: none; transition: .35s; font-size: .85rem;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+      .orbit, .orb, .nebula, .scroll-hint b::after, .ring-spin, .planet-face, .planet-core { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader">
+    <canvas id="warpCanvas"></canvas>
+    <div class="pre-inner">
+      <div class="pre-logo">ОНА — КОСМОС</div>
+      <div class="pre-sub">запуск созвездия</div>
+      <div class="pre-bar"><div class="pre-bar-fill"></div></div>
+      <button class="pre-skip" id="skipPre" type="button">Пропустить</button>
+    </div>
+  </div>
+
+  <canvas id="starsBg"></canvas>
+  <div class="nebula n1" data-parallax="0.12"></div>
+  <div class="nebula n2" data-parallax="-0.08"></div>
+  <div class="nebula n3" data-parallax="0.06"></div>
+  <div class="nebula n4" data-parallax="0.1"></div>
+  <div class="nebula n5" data-parallax="-0.05"></div>
+  <div class="vignette"></div>
+  <canvas id="cursorCanvas"></canvas>
+
+  <header class="nav">
+    <a class="logo" href="#top">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#1a0830"/>
+        <ellipse cx="32" cy="34" rx="22" ry="9" fill="none" stroke="#7af0ff" stroke-width="1.6" transform="rotate(-18 32 34)"/>
+        <path fill="#ffd56a" d="M32 10.5l3.1 12.2 12.4.6-9.7 8 3.4 12.1L32 36.6 22.8 43.4l3.4-12.1-9.7-8 12.4-.6z"/>
+        <circle cx="50" cy="28" r="2.2" fill="#7af0ff"/>
+      </svg>
+      ОНА — <span>КОСМОС</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#galaxy">Созвездие</a>
+      <a href="#path">Траектория</a>
+      <a href="#route">Маршрут</a>
+      <a href="#dream">Мечта</a>
+      <a href="#footer">О проекте</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="soundBtn" type="button" aria-label="Звук" title="Звук">
+        <svg id="iconSound" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16.5 8.5a5 5 0 010 7"/><path d="M19 6a9 9 0 010 12"/>
+        </svg>
+      </button>
+      <button class="burger icon-btn" id="burger" type="button" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#galaxy">Созвездие</a>
+    <a href="#path">Траектория</a>
+    <a href="#route">Маршрут</a>
+    <a href="#dream">Мечта</a>
+    <a href="#footer">О проекте</a>
+  </div>
+
+  <div class="content" id="top">
+    <section class="hero" id="hero">
+      <div class="hero-year" aria-hidden="true">2026</div>
+      <div class="orbit-wrap" data-mouse="18">
+        <div class="orbit"><i></i></div>
+        <div class="orbit"><i></i></div>
+        <div class="orbit"><i></i></div>
+      </div>
+      <div class="relative z-10">
+        <p class="kicker reveal">Год белорусской женщины · Взгляд в будущее</p>
+        <h1 class="hero-title glitch reveal d1" data-text="ОНА — КОСМОС">ОНА — КОСМОС</h1>
+        <p class="hero-sub reveal d3">За пределами возможного: истории белорусских женщин, которые уже изменили мир — и карта твоего следующего шага.</p>
+        <a class="btn-neon reveal d4" href="#galaxy">Начать путешествие <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span>скролл</span><b></b></div>
+    </section>
+
+    <div class="stats">
+      <article class="stat glass reveal"><div class="stat-n" data-count="13" data-suffix=" сут.">0</div><div class="stat-l">полёт Марины Василевской на МКС</div></article>
+      <article class="stat glass reveal d1"><div class="stat-n" data-count="3000" data-suffix="+">0</div><div class="stat-l">претенденток на первый женский полёт</div></article>
+      <article class="stat glass reveal d2"><div class="stat-n">>50%</div><div class="stat-l">женщины среди исследователей НАН</div></article>
+      <article class="stat glass reveal d3"><div class="stat-n">2026</div><div class="stat-l">год белорусской женщины</div></article>
+    </div>
+
+    <section id="galaxy">
+      <div class="wrap">
+        <p class="sec-num reveal">01 — ОРБИТА</p>
+        <h2 class="sec-title reveal d1">ПЯТЬ ПЛАНЕТ БЕЛАРУСИ</h2>
+        <p class="sec-lead reveal d2">Не карта — живая система. В центре страна, вокруг неё пять судеб. Наведи, чтобы остановить орбиту. Нажми на планету — откроется история.</p>
+
+        <div class="glass orrery-stage reveal" id="orrery" aria-label="Орбиты пяти белорусских женщин">
+          <div class="sun"><span>БЕЛАРУСЬ<br>2026</span></div>
+          <div class="ring-wrap r1"><div class="ring-spin" style="--t:22s">
+            <button class="planet" data-id="cosmos" style="--c:#7af0ff;--t:22s" aria-label="Космос: Марина Василевская">
+              <span class="planet-face"><span class="planet-core"></span><b>Космос</b><em>Василевская</em></span>
+            </button>
+          </div></div>
+          <div class="ring-wrap r2"><div class="ring-spin" style="--t:32s">
+            <button class="planet" data-id="science" style="--c:#ffd56a;--t:32s" aria-label="Наука: Эмилия Коломиец">
+              <span class="planet-face"><span class="planet-core"></span><b>Наука</b><em>Коломиец</em></span>
+            </button>
+          </div></div>
+          <div class="ring-wrap r3"><div class="ring-spin" style="--t:42s">
+            <button class="planet" data-id="it" style="--c:#5ef0c2;--t:42s" aria-label="IT: Вера Решетина">
+              <span class="planet-face"><span class="planet-core"></span><b>IT</b><em>Решетина</em></span>
+            </button>
+          </div></div>
+          <div class="ring-wrap r4"><div class="ring-spin" style="--t:54s">
+            <button class="planet" data-id="aviation" style="--c:#ff9f5a;--t:54s" aria-label="Авиация: Наталья Титенкова">
+              <span class="planet-face"><span class="planet-core"></span><b>Авиация</b><em>Титенкова</em></span>
+            </button>
+          </div></div>
+          <div class="ring-wrap r5"><div class="ring-spin" style="--t:68s">
+            <button class="planet" data-id="art" style="--c:#ff7ac8;--t:68s" aria-label="Искусство: Надежда Ходасевич-Леже">
+              <span class="planet-face"><span class="planet-core"></span><b>Искусство</b><em>Надя Леже</em></span>
+            </button>
+          </div></div>
+        </div>
+        <div class="legend reveal" id="starLegend"></div>
+        <div class="galaxy-mobile" id="galaxyMobile"></div>
+        <p class="sec-lead" style="margin:18px 0 0;font-size:.85rem">На телефоне орбиты можно листать карточками внизу.</p>
+      </div>
+    </section>
+
+    <section id="path">
+      <div class="wrap">
+        <p class="sec-num reveal">02 — ТЕСТ</p>
+        <h2 class="sec-title reveal d1">ТРАЕКТОРИЯ БУДУЩЕГО</h2>
+        <p class="sec-lead reveal d2">Четыре простых вопроса — как после уроков, а не как на экзамене по философии. В конце нажми на профессию: расскажем, что это и куда в Беларуси поступать.</p>
+        <div class="quiz-card glass reveal" id="quizCard">
+          <div class="q-progress" id="qProgress"></div>
+          <div id="quizBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="route">
+      <div class="wrap">
+        <p class="sec-num reveal">03 — НАВИГАТОР</p>
+        <h2 class="sec-title reveal d1">КУРС НА ВУЗ</h2>
+        <p class="sec-lead reveal d2">Напиши класс и кем хочешь стать — соберём пошаговый маршрут: что делать в этом году, какие предметы тянуть и в какие вузы Беларуси целиться.</p>
+        <div class="plan-layout">
+          <form class="glass" id="planForm">
+            <label class="field"><span>Имя</span><input name="name" maxlength="24" placeholder="Как к тебе обращаться?"></label>
+            <label class="field">
+              <span>Класс</span>
+              <select name="grade" required>
+                <option value="8">8 класс</option>
+                <option value="9" selected>9 класс</option>
+                <option value="10">10 класс</option>
+                <option value="11">11 класс</option>
+                <option value="done">Уже закончила школу</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Хочу стать</span>
+              <select name="track" required>
+                <option value="design">Дизайнером</option>
+                <option value="it">Программисткой / в IT</option>
+                <option value="bio">Биологом / в биотех</option>
+                <option value="space">Инженером космических систем</option>
+                <option value="avia">Пилотом / в авиации</option>
+                <option value="med">Врачом</option>
+                <option value="arch">Архитектором</option>
+                <option value="journal">Журналисткой</option>
+                <option value="teach">Учительницей</option>
+                <option value="eng">Инженером</option>
+                <option value="custom">Свой вариант</option>
+              </select>
+            </label>
+            <label class="field hidden" id="customField">
+              <span>Напиши, кем хочешь стать</span>
+              <input name="custom" maxlength="60" placeholder="Например: ветеринар, режиссёр, судья...">
+            </label>
+            <button class="btn-neon btn-gold" type="submit">Построить маршрут</button>
+          </form>
+          <div class="glass" id="planOut">
+            <div class="plan-empty">Слева выбери класс и профессию — здесь появится твоя мини-карта поступления.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dream">
+      <div class="wrap">
+        <p class="sec-num reveal">04 — СОЗВЕЗДИЕ МЕЧТ</p>
+        <h2 class="sec-title reveal d1">ЗАЖГИ СВОЮ ЗВЕЗДУ</h2>
+        <p class="sec-lead reveal d2">Оставь имя и мечту. Страница не перезагрузится — на небе загорится новая разноцветная звезда.</p>
+        <div class="dream-layout">
+          <form class="glass" id="dreamForm" autocomplete="on">
+            <label class="field"><span>Имя</span><input name="name" maxlength="24" required placeholder="Как тебя зовут?"></label>
+            <label class="field"><span>Мечта</span><textarea name="dream" maxlength="140" required placeholder="Кем хочешь стать? Какой экзамен сдать? Куда полететь?"></textarea></label>
+            <button class="btn-neon btn-gold" type="submit">Зажечь звезду</button>
+          </form>
+          <div class="glass" id="dreamSky"><span class="sky-count" id="skyCount">На нашем небе 0 мечт</span></div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">
+      <div class="foot-sky">
+        <button class="foot-planet" data-id="cosmos" style="--c:#7af0ff" aria-label="Космос">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 6.2L20 9l-5.2 3.4L16.5 19 12 15.7 7.5 19l1.7-6.6L4 9l6.6.2L12 3z"/><circle cx="19" cy="5" r="1.2" fill="currentColor" stroke="none"/></svg>
+          <span>Космос</span>
+        </button>
+        <button class="foot-planet" data-id="science" style="--c:#ffd56a" aria-label="Наука">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="2.2"/><ellipse cx="12" cy="12" rx="9" ry="3.4"/><ellipse cx="12" cy="12" rx="9" ry="3.4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.4" transform="rotate(-60 12 12)"/></svg>
+          <span>Наука</span>
+        </button>
+        <button class="foot-planet" data-id="it" style="--c:#5ef0c2" aria-label="IT">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13 6l-2 12"/></svg>
+          <span>IT</span>
+        </button>
+        <button class="foot-planet" data-id="aviation" style="--c:#ff9f5a" aria-label="Авиация">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l18-7-3 9"/><path d="M3 13l6 2 2 6 2-5"/><path d="M9 15l4-3"/></svg>
+          <span>Авиация</span>
+        </button>
+        <button class="foot-planet" data-id="art" style="--c:#ff7ac8" aria-label="Искусство">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 21a9 9 0 1 1 9-9c0 2.2-1.5 3-3 3h-1.4a2.6 2.6 0 0 0-2.5 3.3A3 3 0 0 1 12 21z"/><circle cx="7.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="10.5" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="7.8" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="11.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span>Искусство</span>
+        </button>
+      </div>
+      <blockquote class="foot-quote">«Предел возможного — это просто место, где кто-то остановился. Ты можешь пойти дальше.»</blockquote>
+      <div class="foot-missions">
+        <a href="#galaxy"><small>01 · ИСТОРИИ</small>Пять планет. Пять женщин. Один клик — и орбита открывается.</a>
+        <a href="#path"><small>02 · ТЕСТ</small>Четыре живых вопроса. Потом — профессии, которым учат в Беларуси.</a>
+        <a href="#route"><small>03 · МАРШРУТ</small>Класс, мечта, свой вариант. Мини-карта шагов, которую можно листать.</a>
+      </div>
+      <div class="foot-bar">
+        <a class="logo" href="#top">
+          <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#1a0830"/>
+            <ellipse cx="32" cy="34" rx="22" ry="9" fill="none" stroke="#7af0ff" stroke-width="1.6" transform="rotate(-18 32 34)"/>
+            <path fill="#ffd56a" d="M32 10.5l3.1 12.2 12.4.6-9.7 8 3.4 12.1L32 36.6 22.8 43.4l3.4-12.1-9.7-8 12.4-.6z"/>
+            <circle cx="50" cy="28" r="2.2" fill="#7af0ff"/>
+          </svg>
+          ОНА — <span>КОСМОС</span>
+        </a>
+        <span>2026 · Год белорусской женщины · конкурс «Взгляд в будущее»</span>
+        <a href="#top">Наверх ↑</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card glass" id="modalCard"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (() => {
+      "use strict";
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+      const STARS = {
+        cosmos: {
+          id: "cosmos", label: "КОСМОС", name: "Марина Василевская",
+          years: "род. 14 сентября 1990, Минск", city: "Минск", color: "#7af0ff",
+          quote: "Космос начинается там, где кто-то сказал: «Я смогу».", quoteNote: "Эпиграф орбиты",
+          bio: "Первая белорусская женщина-космонавт, Герой Беларуси (2024). Бортпроводница-инструктор «Белавиа». Из более чем трёх тысяч претенденток прошла отбор и подготовку в ЦПК им. Ю. А. Гагарина. 23 марта 2024 года стартовала с Байконура на «Союзе МС-25». 14 суток на МКС, научная программа, съёмка Земли, исследования с лактоферрином. Орден Гагарина.",
+          contrib: "Она сделала белорусский след видимым с орбиты. Для страны космос перестал быть чужой историей."
+        },
+        science: {
+          id: "science", label: "НАУКА", name: "Эмилия Ивановна Коломиец",
+          years: "род. 10 февраля 1949", city: "Минск · НАН", color: "#ffd56a",
+          quote: "У белорусской науки — женское лицо.", quoteNote: "О роли женщин в НАН",
+          bio: "Академик НАН Беларуси, доктор биологических наук, профессор. Микробиология и биотехнология. Директор Института микробиологии (2004–2022), гендиректор ГНПО «Химический синтез и биотехнологии». Биопрепараты для защиты растений. Учёный года–2017. Рядом — целое созвездие исследовательниц: больше половины сотрудников Академии наук — женщины.",
+          contrib: "Лаборатория тоже космос: невидимый мир бактерий стал силой белорусских полей."
+        },
+        it: {
+          id: "it", label: "IT", name: "Вера Решетина",
+          years: "выпускница мехмата БГУ", city: "Минск · ПВТ", color: "#5ef0c2",
+          quote: "Важен не пол, а знание — и смелость начать своё.", quoteNote: "Голос орбиты",
+          bio: "Соосновательница CactusSoft (с 2007). Мехмат БГУ, путь через ScienceSoft. Резидент Парка высоких технологий. Мобильные и веб-приложения для Microsoft, Nokia, «Яндекса», Mail.ru: офис в Бельгии, разработка в Минске. Рядом — галактика разработчиц от БГУИРа до игровых студий.",
+          contrib: "Код, написанный в Минске, держит продукты целой планеты — и женский голос в нём звучит уверенно."
+        },
+        aviation: {
+          id: "aviation", label: "АВИАЦИЯ", name: "Наталья Титенкова",
+          years: "род. 16 сентября 1988, Бобруйск", city: "Бобруйск", color: "#ff9f5a",
+          quote: "Когда небо — твоя мечта, выучить и запомнить можно всё что угодно.", quoteNote: "Из интервью",
+          bio: "Первая женщина — военный лётчик суверенной Беларуси. В 15 лет — самостоятельный полёт на планере. Бобруйский аэроклуб ДОСААФ, Як-52, экспериментальный набор девушек в Военную академию. Ан-26 в Мачулищах, затем «Белавиа», Boeing 737, тысячи часов. Рядом открыла гражданское небо и Светлана Еременко.",
+          contrib: "Она села в кабину, куда «девушек не брали». Небо спросило характер, а не пол."
+        },
+        art: {
+          id: "art", label: "ИСКУССТВО", name: "Надежда Ходасевич-Леже",
+          years: "1904, Витебская губерния — 1982, Франция", city: "Витебщина", color: "#ff7ac8",
+          quote: "Париж покорился, но корни остались белорусскими.", quoteNote: "Голос орбиты",
+          bio: "Художница, график, мозаистка. Из крестьянской семьи деревни Осетище (Докшицкий район) — через Смоленск и Варшаву — в Париж, в академию Фернана Леже. Участница Сопротивления, аукцион в помощь военнопленным. В 1960–70-е передала на родину десятки работ. Мир знал её как Надя Леже.",
+          contrib: "Белорусский взгляд дошёл до столицы мирового искусства — и не забыл дом."
+        }
+      };
+
+      const JOBS = {
+        fullstack: { name: "Разработка приложений", desc: "Пишешь сайты и сервисы, из которых потом пользуются тысячи людей. В Беларуси это ядро ПВТ: от банковских систем до игр.", where: ["БГУИР — ПО информационных технологий", "БГУ, ФПМИ", "БНТУ — IT-специальности", "Колледжи и IT-академии при ПВТ"], exams: "Обычно язык + математика, часто физика. Смотри конкретную специальность на сайте вуза." },
+        ai: { name: "Искусственный интеллект", desc: "Учишь модели находить закономерности: от медицины до навигации. Нужны математика, python и любопытство.", where: ["БГУ ФПМИ / механика и математика", "БГУИР — интеллектуальные системы", "лаборатории НАН"], exams: "Математика, язык, часто физика или информатика." },
+        cyber: { name: "Кибербезопасность", desc: "Защищаешь данные людей и компаний. Спокойная голова + умение искать слабые места.", where: ["БГУИР", "Академия МВД (профильные программы)", "курсы вендоров и ПВТ"], exams: "Математика, язык, физика/информатика — по плану вуза." },
+        ux: { name: "UX / дизайн интерфейсов", desc: "Делаешь так, чтобы приложением было удобно пользоваться. Мост между кодом и человеком.", where: ["БГУИР (дизайн и IT)", "БГАИ — дизайн", "БГУ, курсы продуктового дизайна"], exams: "Язык, математика или творческий — зависит от факультета. Портфолио решает многое." },
+        pm: { name: "Управление IT-продуктом", desc: "Собираешь команду, сроки и смысл продукта. Часто приходят из разработки, дизайна или экономики.", where: ["БГУ экономический / ФПМИ", "БГУИР", "менеджмент БГЭУ + опыт в ПВТ"], exams: "Язык, математика или обществоведение — по специальности." },
+        bioinfo: { name: "Биоинформатика", desc: "Читаешь геномы как код. Стык биологии и программирования — очень белорусская научная история.", where: ["БГУ биофак + курсы программирования", "Институт биофизики и клеточной инженерии НАН", "совместные магистерские треки"], exams: "Биология, химия, язык. Математика — сильный плюс." },
+        biotech: { name: "Биотехнология", desc: "Из микробов и клеток делают лекарства, защиту растений, еду. Школа Коломиец — как раз об этом.", where: ["БГУ", "Институт микробиологии НАН", "технологические факультеты БГТУ"], exams: "Химия, биология, язык." },
+        molbio: { name: "Молекулярная биология", desc: "Смотришь, как устроена жизнь на уровне молекул. Путь в лабораторию и в фарму.", where: ["БГУ", "институты НАН", "БГМУ (для мед.уклона)"], exams: "Биология, химия, язык." },
+        pharma: { name: "Фармацевтическая разработка", desc: "От молекулы до таблетки. Нужны химия, аккуратность и длинное дыхание.", where: ["БГМУ — фармация", "Витебский ГМУ", "химические факультеты БГУ / БГТУ"], exams: "Химия, биология, язык." },
+        micro: { name: "Микробиология", desc: "Работа с бактериями, ферментами, биопрепаратами. Классика белорусской прикладной науки.", where: ["БГУ", "Институт микробиологии НАН"], exams: "Биология, химия, язык." },
+        spaceeng: { name: "Космическая инженерия", desc: "Спутники, бортовые системы, материалы. Беларусь делает оптику и аппаратуру для орбиты.", where: ["БГУИР", "БНТУ", "УП «Геоинформационные системы» НАН", "БГУ — аэрокосмос / радиофизика"], exams: "Математика, физика, язык." },
+        remote: { name: "Дистанционное зондирование Земли", desc: "Читаешь снимки из космоса: лес, поля, паводки, города. Очень прикладная профессия для страны.", where: ["БГУ геофак", "БГУИР", "НАН, геоинформационные системы"], exams: "Математика / география, язык, информатика — по плану." },
+        sat: { name: "Спутниковые системы", desc: "Связь, навигация, полезные нагрузки. Техническая работа с железом и сигналом.", where: ["БГУИР", "БГУ радиофизический", "БНТУ"], exams: "Математика, физика, язык." },
+        cubesat: { name: "Наноспутники", desc: "Маленькие аппараты, которые студенческие команды реально собирают. Вход в космос без «космодрома во дворе».", where: ["студенческие бюро БГУИР / БГУ", "кружки аэрокосмоса", "НАН"], exams: "Математика, физика, язык + руки и команда." },
+        gis: { name: "Геоинформатика", desc: "Карты, данные, города и поля в компьютере. Мост между космосом и землеустройством.", where: ["БГУ", "БНТУ", "Политехники регионов"], exams: "Математика или география, язык, информатика." },
+        pilot: { name: "Пилот гражданской авиации", desc: "Кабина, ответственность, дисциплина. В Беларуси путь часто через военную академию, аэроклуб и медкомиссию.", where: ["Авиационный факультет Военной академии РБ", "аэроклубы ДОСААФ", "дальше — «Белавиа» и тип ВС"], exams: "Математика, физика, язык. Отдельно — жёсткая медкомиссия и физподготовка." },
+        aviaeng: { name: "Авиационный инженер", desc: "Самолёт должен летать безопасно. Это про технику, регламенты и характер.", where: ["БНТУ", "Военная академия", "авиационные колледжи / переподготовка"], exams: "Математика, физика, язык." },
+        atc: { name: "Диспетчер УВД", desc: "Голос, который ведёт борты. Концентрация и спокойствие в наушниках.", where: ["профильная подготовка гражданской авиации", "Военная академия (смежные треки)"], exams: "Язык, математика; английский критичен. Медкомиссия." },
+        flight: { name: "Эксплуатация воздушных судов", desc: "Чтобы рейс состоялся: техника, документы, наземные службы.", where: ["БНТУ", "отраслевые программы гражданской авиации"], exams: "Математика, физика, язык." },
+        digital: { name: "Цифровой арт / моушн", desc: "Картинка, которая движется: клипы, заставки, реклама, игры.", where: ["БГАИ", "БГУКИ", "IT-компании Минска (motion / design)"], exams: "Творческий экзамен, язык, история Беларуси — типичный набор академии." },
+        gameart: { name: "Гейм-арт", desc: "Персонажи, миры и интерфейсы игр. В Минске сильная игровая школа.", where: ["БГАИ", "БГУИР (смежно)", "игровые студии, джуниор-позиции с портфолио"], exams: "Творческий + язык. Портфолио важнее диплома на старте." },
+        mural: { name: "Монументальная живопись", desc: "Стены, мозаика, общественные пространства. Путь Нади Леже в современном прочтении.", where: ["БГАИ — монументально-декоративное искусство"], exams: "Рисунок, композиция, живопись, язык, история Беларуси." },
+        mosaic: { name: "Мозаика и медиаарт", desc: "Классическая техника и новые медиа. Хорошо стыкуется с дизайном среды.", where: ["БГАИ", "художественные колледжи", "мастерские"], exams: "Творческий цикл БГАИ." },
+        creative: { name: "Креативное направление", desc: "Придумывать идеи для брендов, сцен, соцсетей и культурных проектов.", where: ["БГАИ", "БГУКИ", "БГЭУ (маркетинг) + практика"], exams: "Зависит от вуза: творческий или обществоведение + язык." }
+      };
+
+      const TRACKS = {
+        design: {
+          title: "дизайнер", accent: "#ff7ac8",
+          subjects: ["рисунок с натуры", "композиция", "история Беларуси", "язык", "портфолио"],
+          unis: [
+            { city: "Минск", name: "БГАИ", spec: "Графический дизайн, монументально-декоративное искусство", exams: "творческий + язык + история Беларуси" },
+            { city: "Минск", name: "БНТУ", spec: "Дизайн / архитектурная среда", exams: "часто математика + творческий + язык" },
+            { city: "Минск", name: "БГУКИ", spec: "Дизайн, мультимедиа", exams: "по плану факультета" }
+          ]
+        },
+        it: {
+          title: "IT-специалистка", accent: "#5ef0c2",
+          subjects: ["математика", "информатика", "физика", "язык", "английский"],
+          unis: [
+            { city: "Минск", name: "БГУИР", spec: "ПО, ИИ, информатика", exams: "математика, физика, язык" },
+            { city: "Минск", name: "БГУ, ФПМИ", spec: "прикладная математика, кибербезопасность", exams: "математика, физика, язык" },
+            { city: "Минск", name: "БНТУ", spec: "программная инженерия", exams: "математика, физика, язык" }
+          ]
+        },
+        bio: {
+          title: "биолог / биотехнолог", accent: "#ffd56a",
+          subjects: ["биология", "химия", "язык", "лабораторная аккуратность"],
+          unis: [
+            { city: "Минск", name: "БГУ, биофак", spec: "биология, биотехнология", exams: "биология, химия, язык" },
+            { city: "Минск", name: "НАН / магистратура", spec: "микробиология, биофизика", exams: "после бакалавриата" },
+            { city: "Гродно / Гомель", name: "региональные университеты", spec: "биология, экология", exams: "биология, химия, язык" }
+          ]
+        },
+        space: {
+          title: "инженер космических систем", accent: "#7af0ff",
+          subjects: ["математика", "физика", "информатика", "язык"],
+          unis: [
+            { city: "Минск", name: "БГУИР", spec: "радиотехника, информатика, аэрокосмос", exams: "математика, физика, язык" },
+            { city: "Минск", name: "БГУ", spec: "радиофизика, аэрокосмические дисциплины", exams: "математика, физика, язык" },
+            { city: "Минск", name: "НАН, геоинформационные системы", spec: "спутники и снимки Земли", exams: "через вуз + стажировку" }
+          ]
+        },
+        avia: {
+          title: "пилот / авиационный специалист", accent: "#ff9f5a",
+          subjects: ["математика", "физика", "английский", "физподготовка", "медкомиссия"],
+          unis: [
+            { city: "Минск", name: "Военная академия РБ", spec: "авиационный факультет", exams: "математика, физика, язык + отбор и здоровье" },
+            { city: "регионы", name: "аэроклубы ДОСААФ", spec: "планёр, Як-52, первые часы", exams: "не вуз, но обязательный опыт" },
+            { city: "Минск", name: "БНТУ / гражданская эксплуатация", spec: "авиационный инженер", exams: "математика, физика, язык" }
+          ]
+        },
+        med: {
+          title: "врач", accent: "#ff8fab",
+          subjects: ["химия", "биология", "язык", "устойчивость к нагрузке"],
+          unis: [
+            { city: "Минск", name: "БГМУ", spec: "лечебное дело, педиатрия, стоматология", exams: "химия, биология, язык" },
+            { city: "Витебск", name: "ВГМУ", spec: "лечебное дело, фармация", exams: "химия, биология, язык" },
+            { city: "Гродно / Гомель", name: "ГрГМУ / ГомГМУ", spec: "лечебное дело", exams: "химия, биология, язык" }
+          ]
+        },
+        arch: {
+          title: "архитектор", accent: "#c9a6ff",
+          subjects: ["рисунок", "черчение", "математика", "язык"],
+          unis: [
+            { city: "Минск", name: "БНТУ", spec: "архитектура", exams: "творческий + математика + язык" },
+            { city: "Минск", name: "БГАИ", spec: "архитектурная среда / монументалка", exams: "творческий цикл" }
+          ]
+        },
+        journal: {
+          title: "журналистка", accent: "#6ea8ff",
+          subjects: ["язык (рус / бел)", "история Беларуси", "обществоведение", "портфолио текстов"],
+          unis: [
+            { city: "Минск", name: "БГУ, журфак", spec: "журналистика, медиакоммуникации", exams: "язык + история / творческий — по плану года" },
+            { city: "Минск", name: "БГУКИ", spec: "аудиовизуальные медиа", exams: "по плану факультета" }
+          ]
+        },
+        teach: {
+          title: "учительница", accent: "#c6f25a",
+          subjects: ["свой любимый предмет", "язык", "педагогика на практике"],
+          unis: [
+            { city: "Минск", name: "БГПУ им. М. Танка", spec: "педагогические специальности", exams: "зависят от предмета" },
+            { city: "регионы", name: "ГрГУ, ВГУ, ГГУ и др.", spec: "учитель-предметник", exams: "профиль + язык" }
+          ]
+        },
+        eng: {
+          title: "инженер", accent: "#ffd56a",
+          subjects: ["математика", "физика", "черчение / информатика", "язык"],
+          unis: [
+            { city: "Минск", name: "БНТУ", spec: "машиностроение, энергетика, строительство", exams: "математика, физика, язык" },
+            { city: "Минск", name: "БГУИР", spec: "электроника и связь", exams: "математика, физика, язык" },
+            { city: "Брест / Гомель / Гродно", name: "БрГТУ, ГГТУ, ГрГУ", spec: "технические направления", exams: "математика, физика, язык" }
+          ]
+        },
+        custom: {
+          title: "свой путь", accent: "#c9a6ff",
+          subjects: ["язык", "сильный профильный предмет", "практика или портфолио"],
+          unis: [
+            { city: "Минск", name: "БГУ", spec: "Много факультетов — хорошая точка, если направление ещё ищется", exams: "смотри конкретный факультет" },
+            { city: "твой город", name: "Региональный вуз или колледж", spec: "Часто ближе, спокойнее и дешевле на старте", exams: "по плану специальности" },
+            { city: "Минск", name: "БНТУ / БГУИР / БГАИ / БГПУ", spec: "Четыре большие двери: техника, IT, искусство, педагогика", exams: "выбери одну и открой сайт вуза" }
+          ]
+        }
+      };
+
+      function portraitSVG(id) {
+        const map = {
+          cosmos: `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="sp1" cx="40%" cy="35%"><stop offset="0%" stop-color="#9be7ff"/><stop offset="55%" stop-color="#1a4d8f"/><stop offset="100%" stop-color="#050818"/></radialGradient><radialGradient id="e1" cx="45%" cy="40%"><stop offset="0%" stop-color="#cdefff"/><stop offset="45%" stop-color="#3aa0ff"/><stop offset="100%" stop-color="#163b2a"/></radialGradient></defs><circle cx="100" cy="100" r="100" fill="url(#sp1)"/><circle cx="100" cy="92" r="58" fill="none" stroke="#ffd56a" stroke-width="3"/><ellipse cx="100" cy="100" rx="40" ry="30" fill="url(#e1)"/></svg>`,
+          science: `<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#3a2208"/><ellipse cx="100" cy="100" rx="54" ry="18" fill="none" stroke="#ffd56a" stroke-width="2"/><ellipse cx="100" cy="100" rx="18" ry="54" fill="none" stroke="#ffd56a" stroke-width="2" transform="rotate(30 100 100)"/><ellipse cx="100" cy="100" rx="18" ry="54" fill="none" stroke="#7af0ff" stroke-width="1.5" transform="rotate(-30 100 100)"/><circle cx="100" cy="100" r="10" fill="#fff8e1"/></svg>`,
+          it: `<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#07352c"/><path d="M70 70 L50 100 L70 130" fill="none" stroke="#5ef0c2" stroke-width="4"/><path d="M130 70 L150 100 L130 130" fill="none" stroke="#5ef0c2" stroke-width="4"/><rect x="88" y="60" width="8" height="80" fill="#ffd56a"/></svg>`,
+          aviation: `<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2a1408"/><path d="M30 110 L100 96 L170 110 L100 104 Z" fill="#ffe1c4"/><path d="M96 60 L104 60 L108 150 L92 150 Z" fill="#ffb347"/><circle cx="100" cy="88" r="6" fill="#7af0ff"/></svg>`,
+          art: `<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2a0b22"/><circle cx="70" cy="70" r="46" fill="#ff7ac8"/><rect x="96" y="40" width="70" height="70" fill="#ffd56a"/><polygon points="40,150 100,90 160,150 100,180" fill="#7af0ff"/><circle cx="130" cy="150" r="22" fill="#c9a6ff"/></svg>`
+        };
+        return map[id] || map.cosmos;
+      }
+
+      const AudioFX = {
+        enabled: true, ctx: null,
+        ensure() {
+          if (!this.ctx) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            this.ctx = new AC();
+          }
+          if (this.ctx.state === "suspended") this.ctx.resume();
+        },
+        tone(freq, dur, type, gain, slide) {
+          if (!this.enabled) return;
+          this.ensure();
+          if (!this.ctx) return;
+          const t = this.ctx.currentTime;
+          const o = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          const f = this.ctx.createBiquadFilter();
+          f.type = "lowpass"; f.frequency.value = 2400;
+          o.type = type || "sine";
+          o.frequency.setValueAtTime(freq, t);
+          if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(gain || 0.06, t + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          const d = this.ctx.createDelay(); d.delayTime.value = 0.18;
+          const dg = this.ctx.createGain(); dg.gain.value = 0.22;
+          o.connect(g); g.connect(f); f.connect(this.ctx.destination);
+          f.connect(d); d.connect(dg); dg.connect(this.ctx.destination);
+          o.start(t); o.stop(t + dur + 0.05);
+        },
+        star() { this.tone(523.25, 0.7, "sine", 0.07, 1046.5); setTimeout(() => this.tone(784, 0.45, "triangle", 0.03), 40); },
+        chime() { this.tone(1046.5, 0.5, "sine", 0.06, 1318); setTimeout(() => this.tone(1568, 0.6, "sine", 0.04), 90); },
+        soft() { this.tone(440, 0.25, "sine", 0.03, 660); }
+      };
+
+      function runPreloader() {
+        const pre = $("#preloader");
+        const canvas = $("#warpCanvas");
+        const ctx = canvas.getContext("2d");
+        let w, h, running = true, speed = 12;
+        const stars = [];
+        const resize = () => { w = canvas.width = innerWidth; h = canvas.height = innerHeight; };
+        resize(); addEventListener("resize", resize);
+        for (let i = 0; i < 480; i++) stars.push({ x: Math.random() * w - w / 2, y: Math.random() * h - h / 2, z: Math.random() * w, h: Math.random() * 360 });
+        const tick = () => {
+          if (!running) return;
+          ctx.fillStyle = "rgba(18,4,28,0.32)"; ctx.fillRect(0, 0, w, h);
+          speed += 0.04;
+          for (const s of stars) {
+            const pz = s.z; s.z -= speed;
+            if (s.z <= 1) { s.z = w; s.x = Math.random() * w - w / 2; s.y = Math.random() * h - h / 2; }
+            const k = 128 / s.z, pk = 128 / pz, shade = 1 - s.z / w;
+            ctx.strokeStyle = `hsla(${s.h}, 90%, ${70 + shade * 20}%, ${0.2 + shade * 0.8})`;
+            ctx.lineWidth = 1 + shade * 2;
+            ctx.beginPath();
+            ctx.moveTo(s.x * pk + w / 2, s.y * pk + h / 2);
+            ctx.lineTo(s.x * k + w / 2, s.y * k + h / 2);
+            ctx.stroke();
+          }
+          requestAnimationFrame(tick);
+        };
+        tick();
+        const hide = () => { running = false; pre.classList.add("off"); setTimeout(() => pre.remove(), 900); document.body.classList.add("cursor-on"); };
+        $("#skipPre").addEventListener("click", hide);
+        const ready = new Promise((res) => { if (document.readyState === "complete") res(); else addEventListener("load", res, { once: true }); });
+        Promise.all([ready, new Promise((r) => setTimeout(r, 2400))]).then(hide);
+      }
+
+      function runSpace() {
+        const canvas = $("#starsBg"), ctx = canvas.getContext("2d");
+        const cc = $("#cursorCanvas"), cctx = cc.getContext("2d");
+        let w, h, mx = innerWidth / 2, my = innerHeight / 2, vis = true, shoot = null;
+        const far = [], near = [], trail = [], gals = [];
+        const colors = ["255,122,200", "255,213,106", "122,240,255", "94,240,194", "201,166,255", "255,159,90"];
+        const resize = () => { w = canvas.width = cc.width = innerWidth; h = canvas.height = cc.height = innerHeight; };
+        resize(); addEventListener("resize", resize);
+        for (let i = 0; i < 160; i++) far.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.3 + 0.2, a: Math.random() * 0.7 + 0.2, tw: Math.random() * 7, c: colors[i % colors.length] });
+        for (let i = 0; i < 80; i++) near.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 2 + 0.5, a: Math.random() * 0.6 + 0.3, tw: Math.random() * 7, c: colors[(i + 2) % colors.length] });
+        gals.push({ x: 0.18, y: 0.22, r: 180, rot: 0.4, c: ["rgba(255,122,200,.28)", "rgba(255,122,200,0)"] });
+        gals.push({ x: 0.82, y: 0.35, r: 200, rot: -0.5, c: ["rgba(110,168,255,.28)", "rgba(110,168,255,0)"] });
+        gals.push({ x: 0.55, y: 0.78, r: 160, rot: 0.2, c: ["rgba(255,213,106,.18)", "rgba(255,213,106,0)"] });
+        addEventListener("mousemove", (e) => {
+          mx = e.clientX; my = e.clientY;
+          trail.push({ x: mx, y: my, a: 1, r: Math.random() * 2.2 + 1, c: colors[Math.floor(Math.random() * colors.length)] });
+          if (trail.length > 52) trail.shift();
+        });
+        document.addEventListener("visibilitychange", () => { vis = !document.hidden; });
+        const loop = () => {
+          requestAnimationFrame(loop);
+          if (!vis) return;
+          ctx.clearRect(0, 0, w, h);
+          const ox = mx / w - 0.5, oy = my / h - 0.5;
+          ctx.globalCompositeOperation = "screen";
+          gals.forEach((g, i) => {
+            const x = g.x * w + ox * (12 + i * 6), y = g.y * h + oy * 10;
+            const grd = ctx.createRadialGradient(x, y, 0, x, y, g.r);
+            grd.addColorStop(0, g.c[0]); grd.addColorStop(1, g.c[1]);
+            ctx.fillStyle = grd;
+            ctx.beginPath(); ctx.ellipse(x, y, g.r, g.r * 0.52, g.rot, 0, Math.PI * 2); ctx.fill();
+          });
+          ctx.globalCompositeOperation = "source-over";
+          const draw = (arr, par) => {
+            for (const s of arr) {
+              s.tw += 0.02;
+              ctx.beginPath();
+              ctx.fillStyle = `rgba(${s.c},${s.a * (0.55 + Math.sin(s.tw) * 0.45)})`;
+              ctx.arc(s.x + ox * par, s.y + oy * par * 0.6, s.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          };
+          draw(far, 18); draw(near, 40);
+          if (!shoot && Math.random() < 0.01) shoot = { x: Math.random() * w, y: Math.random() * h * 0.45, vx: 7 + Math.random() * 6, vy: 2 + Math.random() * 3, life: 1, c: colors[Math.floor(Math.random() * colors.length)] };
+          if (shoot) {
+            ctx.strokeStyle = `rgba(${shoot.c},${shoot.life})`; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y); ctx.lineTo(shoot.x - shoot.vx * 4, shoot.y - shoot.vy * 4); ctx.stroke();
+            shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life -= 0.02; if (shoot.life <= 0) shoot = null;
+          }
+          cctx.clearRect(0, 0, w, h);
+          if (matchMedia("(hover: hover) and (pointer: fine)").matches && document.body.classList.contains("cursor-on")) {
+            for (const t of trail) {
+              t.a *= 0.9; cctx.beginPath(); cctx.fillStyle = `rgba(${t.c},${t.a})`; cctx.arc(t.x, t.y, t.r, 0, Math.PI * 2); cctx.fill();
+            }
+            cctx.beginPath(); cctx.strokeStyle = "rgba(255,213,106,.95)"; cctx.lineWidth = 1.2; cctx.arc(mx, my, 14, 0, Math.PI * 2); cctx.stroke();
+            cctx.beginPath(); cctx.fillStyle = "rgba(255,122,200,.95)"; cctx.arc(mx, my, 2.4, 0, Math.PI * 2); cctx.fill();
+          }
+        };
+        loop();
+      }
+
+      const modal = $("#modal"), card = $("#modalCard");
+      const closeModal = () => { modal.classList.remove("open"); document.body.classList.remove("locked"); };
+      function openModal(html) {
+        card.innerHTML = `<button class="modal-close" type="button" id="modalClose" aria-label="Закрыть">×</button>${html}`;
+        modal.classList.add("open"); document.body.classList.add("locked");
+        $("#mobileMenu").classList.remove("open"); $("#burger").classList.remove("open");
+        $("#modalClose").addEventListener("click", closeModal);
+      }
+      modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+      addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+      function runUI() {
+        $("#hero").addEventListener("mousemove", (e) => {
+          const x = e.clientX / innerWidth - 0.5, y = e.clientY / innerHeight - 0.5;
+          $$("[data-mouse]").forEach((el) => { el.style.transform = `translate(${x * +el.dataset.mouse}px, ${y * +el.dataset.mouse}px)`; });
+        });
+        let ticking = false;
+        addEventListener("scroll", () => {
+          if (ticking) return; ticking = true;
+          requestAnimationFrame(() => {
+            $$("[data-parallax]").forEach((el) => { el.style.transform = `translate3d(0, ${scrollY * +el.dataset.parallax}px, 0)`; });
+            ticking = false;
+          });
+        });
+        $$('a[href^="#"]').forEach((a) => {
+          a.addEventListener("click", (e) => {
+            const t = $(a.getAttribute("href")); if (!t) return;
+            e.preventDefault();
+            scrollTo({ top: t.getBoundingClientRect().top + scrollY - 64, behavior: "smooth" });
+            $("#mobileMenu").classList.remove("open"); $("#burger").classList.remove("open"); document.body.classList.remove("locked");
+          });
+        });
+        $("#burger").addEventListener("click", () => {
+          const open = $("#mobileMenu").classList.toggle("open");
+          $("#burger").classList.toggle("open", open);
+          document.body.classList.toggle("locked", open);
+        });
+        const io = new IntersectionObserver((entries) => { entries.forEach((en) => { if (en.isIntersecting) en.target.classList.add("is-visible"); }); }, { threshold: 0.14 });
+        $$(".reveal").forEach((el) => { io.observe(el); if (el.getBoundingClientRect().top < innerHeight - 40) el.classList.add("is-visible"); });
+        document.addEventListener("pointerdown", () => AudioFX.ensure(), { once: true });
+        const cio = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (!en.isIntersecting || en.target.dataset.done) return;
+            en.target.dataset.done = "1";
+            const target = +en.target.dataset.count, suffix = en.target.dataset.suffix || "", start = performance.now();
+            const step = (now) => {
+              const p = Math.min(1, (now - start) / 1400);
+              en.target.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+              if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.5 });
+        $$("[data-count]").forEach((el) => cio.observe(el));
+        const title = $(".hero-title");
+        setInterval(() => { title.classList.add("glitching"); setTimeout(() => title.classList.remove("glitching"), 420); }, 5600);
+        $("#soundBtn").addEventListener("click", () => {
+          AudioFX.enabled = !AudioFX.enabled; AudioFX.ensure();
+          $("#iconSound").style.opacity = AudioFX.enabled ? "1" : ".35";
+          toast(AudioFX.enabled ? "Звук включён" : "Звук выключен");
+        });
+      }
+
+      function runGalaxy() {
+        const mobile = $("#galaxyMobile");
+        const legend = $("#starLegend");
+        const list = Object.values(STARS);
+        mobile.innerHTML = list.map((s) =>
+          `<button type="button" class="star-card glass" data-id="${s.id}">
+            <span class="orb" style="--c:${s.color}"></span>
+            <span><small>${s.label} · ${s.city}</small><b>${s.name}</b><em>${s.years}</em></span>
+            <span style="color:var(--muted)">→</span>
+          </button>`
+        ).join("");
+        if (legend) {
+          legend.innerHTML = list.map((s) =>
+            `<button type="button" data-id="${s.id}"><i style="--c:${s.color}"></i>${s.label}</button>`
+          ).join("");
+        }
+        const openStar = (id) => {
+          const s = STARS[id]; if (!s) return;
+          AudioFX.star();
+          openModal(`<div class="modal-grid"><div class="portrait">${portraitSVG(s.id)}</div><div>
+            <span class="badge">${s.city} · ${s.label}</span>
+            <h3 id="modalTitle">${s.name}</h3>
+            <p style="color:var(--muted);font-size:.9rem">${s.years}</p>
+            <p class="quote">«${s.quote}»<br><span style="font-size:.85rem;color:var(--muted);font-style:italic">${s.quoteNote}</span></p>
+            <p>${s.bio}</p><div class="contrib">${s.contrib}</div></div></div>`);
+        };
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(".planet, .foot-planet, .star-card, #starLegend [data-id]");
+          if (!btn || !btn.dataset.id || !STARS[btn.dataset.id]) return;
+          openStar(btn.dataset.id);
+        });
+      }
+
+      function openJob(id) {
+        const j = JOBS[id]; if (!j) return;
+        AudioFX.soft();
+        openModal(`<span class="badge">ПРОФЕССИЯ В РБ</span><h3 id="modalTitle">${j.name}</h3>
+          <p>${j.desc}</p>
+          <div class="contrib"><b>Где учиться в Беларуси</b><ul class="uni-list">${j.where.map((x) => `<li>${x}</li>`).join("")}</ul>
+          <p style="margin-top:10px"><b>Экзамены (ориентир):</b> ${j.exams}</p></div>
+          <p class="note">Это компас, не приёмная комиссия. Перед подачей документов сверься с сайтом вуза в свой год.</p>`);
+      }
+
+      const QUIZ = [
+        {
+          q: "Чем ты чаще всего занята, когда появился свободный час?",
+          options: [
+            { t: "Смотрю ролики про космос, самолёты или «как это устроено»", k: "space" },
+            { t: "Сижу в телефоне / за ноутом: приложения, игры, настройки", k: "code" },
+            { t: "Читаю, вожусь с растениями, животными или домашними опытами", k: "science" },
+            { t: "Рисую, монтирую сторис, собираю коллажи", k: "art" },
+            { t: "Гуляю, катаюсь, чиню что-нибудь руками", k: "aviation" }
+          ]
+        },
+        {
+          q: "Какой урок ты бы точно не вычеркнула из расписания?",
+          options: [
+            { t: "Физика", k: "space" },
+            { t: "Информатика", k: "code" },
+            { t: "Биология или химия", k: "science" },
+            { t: "ИЗО, музыка или МХК", k: "art" },
+            { t: "Физкультура или трудовое", k: "aviation" }
+          ]
+        },
+        {
+          q: "Вам раздали проекты на выбор. Что возьмёшь?",
+          options: [
+            { t: "Макет ракеты, доклад про МКС или спутники", k: "space" },
+            { t: "Сайт, бот или таблицу, которая считает за всех", k: "code" },
+            { t: "Опыт, гербарий или исследование", k: "science" },
+            { t: "Плакат, видео, выставку", k: "art" },
+            { t: "Организовать поездку, маршрут или соревнование", k: "aviation" }
+          ]
+        },
+        {
+          q: "Как подруги чаще всего тебя называют?",
+          options: [
+            { t: "«Ты вечно в облаках»", k: "space" },
+            { t: "«Наша айтишница»", k: "code" },
+            { t: "«Будущая учёная»", k: "science" },
+            { t: "«Самая творческая»", k: "art" },
+            { t: "«Капитан компании»", k: "aviation" }
+          ]
+        }
+      ];
+
+      const RESULTS = {
+        space: {
+          title: "Тебе близки космос и техника орбиты",
+          text: "Тебе интересно, как устроен мир сверху. В Беларуси это не фантазия: оптика, снимки Земли, студенческие спутники.",
+          jobs: ["spaceeng", "remote", "sat", "cubesat", "gis"]
+        },
+        code: {
+          title: "Тебе близко IT",
+          text: "Ты любишь разобраться и собрать сама. ПВТ, БГУИР и БГУ как раз про это.",
+          jobs: ["fullstack", "ai", "cyber", "ux", "pm"]
+        },
+        science: {
+          title: "Тебе близка живая наука",
+          text: "Тебе важно понять, как всё работает изнутри. Биофак, НАН и биотех в стране — реальный путь, не картинка из учебника.",
+          jobs: ["bioinfo", "biotech", "molbio", "pharma", "micro"]
+        },
+        aviation: {
+          title: "Тебе близки небо и движение",
+          text: "Сидеть ровно на месте скучно. Есть аэроклубы, Военная академия и инженерные кафедры — как у Титенковой, путь начинается с первого шага.",
+          jobs: ["pilot", "aviaeng", "atc", "flight"]
+        },
+        art: {
+          title: "Тебе близко искусство и образ",
+          text: "Ты видишь, как сделать красиво и ясно. БГАИ, дизайн, игры и медиа в Минске ждут портфолио, а не идеальный аттестат.",
+          jobs: ["digital", "gameart", "mural", "mosaic", "creative"]
+        }
+      };
+
+      function runQuiz() {
+        const body = $("#quizBody"), progress = $("#qProgress");
+        let i = 0;
+        const score = { space: 0, code: 0, science: 0, art: 0, aviation: 0 };
+        const renderProgress = () => { progress.innerHTML = QUIZ.map((_, idx) => `<i class="${idx <= i ? "on" : ""}"></i>`).join(""); };
+        const showQuestion = () => {
+          renderProgress();
+          const q = QUIZ[i];
+          body.innerHTML = `<div class="quiz-in"><div class="q-title">${q.q}</div><div class="q-opts">${
+            q.options.map((o, n) => `<button type="button" class="q-opt" data-k="${o.k}">${n + 1}. ${o.t}</button>`).join("")
+          }</div></div>`;
+          $$(".q-opt", body).forEach((btn) => {
+            btn.addEventListener("click", () => {
+              btn.classList.add("picked"); score[btn.dataset.k]++; AudioFX.soft();
+              setTimeout(() => { i++; if (i < QUIZ.length) showQuestion(); else showResult(); }, 260);
+            });
+          });
+        };
+        const showResult = () => {
+          const key = Object.keys(score).sort((a, b) => score[b] - score[a])[0];
+          const r = RESULTS[key];
+          progress.innerHTML = QUIZ.map(() => `<i class="on"></i>`).join("");
+          body.innerHTML = `<div class="quiz-in">
+            <div class="result-k">Твой результат</div>
+            <h3 class="result-title">${r.title}</h3>
+            <p style="color:var(--muted)">${r.text}</p>
+            <p style="font-size:.85rem;margin-top:12px">Нажми на профессию — откроется, что это и куда поступать в РБ.</p>
+            <div class="jobs">${r.jobs.map((id) => `<button type="button" class="job" data-job="${id}">${JOBS[id].name}</button>`).join("")}</div>
+            <button type="button" class="btn-neon" id="quizRestart" style="margin-top:8px">Пройти ещё раз</button>
+          </div>`;
+          AudioFX.chime();
+          $$(".job", body).forEach((b) => b.addEventListener("click", () => openJob(b.dataset.job)));
+          $("#quizRestart").addEventListener("click", () => { i = 0; Object.keys(score).forEach((k) => { score[k] = 0; }); showQuestion(); });
+        };
+        showQuestion();
+      }
+
+      function stepsFor(grade, t) {
+        const now = {
+          8: [
+            `В 8 классе не надо выбирать вуз навсегда. Просто не бросай: ${t.subjects.slice(0, 2).join(" и ")}.`,
+            `Запомни имена: ${t.unis.map((u) => u.name).join(", ")}. Погугли их на каникулах.`,
+            "Кружок рядом + папка «мои работы» — уже план Б и план А вместе."
+          ],
+          9: [
+            "9 класс — развилка. Колледж или профиль 10–11: реши до лета.",
+            `Сходи на день открытых дверей в ${t.unis[0].name}. Просто походить по коридору — уже шаг.`,
+            "Если вуз страшно далеко — колледж по теме. Это не понижение, это другой вход."
+          ],
+          10: [
+            "Год, когда «потом» заканчивается. Предмет — несколько раз в неделю, практика — хотя бы раз.",
+            `ЦЭ/ЦТ ориентир: ${t.unis[0].exams}. Открой сайт ${t.unis[0].name} и сверь.`,
+            "План Б: второй вуз или смежная специальность. Одна мечта — три двери."
+          ],
+          11: [
+            "До документов близко. Пробники, сон, справки — заранее.",
+            `Первый приоритет: ${t.unis[0].name}. Второй и третий из списка — тоже подай.`,
+            "Сравни себя не с одноклассницей — с собой в сентябре: что уже собрано?"
+          ],
+          done: [
+            "Школа позади — маршрут не закрыт. Колледж, подготовительные, переподготовка, магистратура.",
+            `Первая дверь: ${t.unis[0].name}. Напиши на странице, кем хочешь быть через 3 года.`,
+            "Год подготовки — не провал, а взлётная полоса."
+          ]
+        };
+        return now[grade] || now[9];
+      }
+
+      function esc(s) {
+        return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      }
+
+      function resolveTrack(form) {
+        const v = form.track.value;
+        if (v !== "custom") return { title: TRACKS[v].title, t: TRACKS[v] };
+        const raw = form.custom.value.trim();
+        if (!raw) return null;
+        const q = raw.toLowerCase();
+        const rules = [
+          [/дизайн|рисун|худож|арт|мод|фото|стилист/, "design"],
+          [/програм|айти|\bit\b|код|разработ|кибер/, "it"],
+          [/био|ветерин|эколог|хими/, "bio"],
+          [/космос|спутник|астро/, "space"],
+          [/пилот|авиа|лётч|летч/, "avia"],
+          [/врач|медиц|стомат|фармац|психолог/, "med"],
+          [/архитект|строител/, "arch"],
+          [/журнал|редакт|медиа|блог/, "journal"],
+          [/учител|педагог|воспитат/, "teach"],
+          [/инженер|конструкт/, "eng"]
+        ];
+        for (const [re, key] of rules) {
+          if (re.test(q)) return { title: raw, t: TRACKS[key] };
+        }
+        return { title: raw, t: TRACKS.custom };
+      }
+
+      function bindRouteScroll(root) {
+        const wrap = root.querySelector(".route-wrap");
+        if (!wrap) return;
+        const prev = root.querySelector(".route-prev");
+        const next = root.querySelector(".route-next");
+        const go = (dx) => wrap.scrollBy({ left: dx, behavior: "smooth" });
+        if (prev) prev.addEventListener("click", () => go(-280));
+        if (next) next.addEventListener("click", () => go(280));
+        let down = false, startX = 0, startLeft = 0;
+        wrap.addEventListener("pointerdown", (e) => { down = true; startX = e.clientX; startLeft = wrap.scrollLeft; wrap.setPointerCapture(e.pointerId); });
+        wrap.addEventListener("pointermove", (e) => { if (!down) return; wrap.scrollLeft = startLeft - (e.clientX - startX); });
+        const up = () => { down = false; };
+        wrap.addEventListener("pointerup", up);
+        wrap.addEventListener("pointercancel", up);
+      }
+
+      function runPlan() {
+        const form = $("#planForm"), out = $("#planOut");
+        const customField = $("#customField");
+        form.track.addEventListener("change", () => {
+          const on = form.track.value === "custom";
+          customField.classList.toggle("hidden", !on);
+          if (on) form.custom.required = true; else { form.custom.required = false; form.custom.value = ""; }
+        });
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const resolved = resolveTrack(form);
+          if (!resolved) { toast("Напиши свой вариант"); return; }
+          const name = form.name.value.trim();
+          const grade = form.grade.value;
+          const t = resolved.t;
+          const steps = stepsFor(grade, t);
+          const title = esc(resolved.title);
+          const hello = name ? `${esc(name)}, вот твой курс: «${title}».` : `Вот твой курс: «${title}».`;
+          const gradeLabel = { 8: "8 класс", 9: "9 класс", 10: "10 класс", 11: "11 класс", done: "после школы" }[grade];
+          AudioFX.chime();
+          out.innerHTML = `
+            <div class="result-k">Мини-карта поступления</div>
+            <h3 class="result-title">${hello}</h3>
+            <p style="color:var(--muted);margin-bottom:14px">Станция сейчас: ${gradeLabel}. Листай шаги влево и вправо.</p>
+            <div class="route-rail">
+              <button type="button" class="route-btn route-prev" aria-label="Назад">←</button>
+              <div class="route-wrap">
+                <div class="route">
+                  ${[
+                    { t: "Сейчас", p: steps[0] },
+                    { t: "Предметы", p: "Держи в фокусе: " + t.subjects.join(", ") + "." },
+                    { t: "Документы", p: steps[1] },
+                    { t: "План Б", p: steps[2] }
+                  ].map((s, idx) => `<article class="station"><i>${idx + 1}</i><h4>${s.t}</h4><p>${s.p}</p></article>`).join("")}
+                </div>
+              </div>
+              <button type="button" class="route-btn route-next" aria-label="Вперёд">→</button>
+            </div>
+            <div class="uni-grid">
+              ${t.unis.map((u) => `<article class="uni-card"><small>${u.city}</small><b>${u.name}</b><p>${u.spec}</p><p class="note">${u.exams}</p></article>`).join("")}
+            </div>
+            <p class="note">Ориентир, не приёмная комиссия. Перед ЦЭ/ЦТ открой сайт вуза в свой год.</p>`;
+          bindRouteScroll(out);
+        });
+      }
+
+      const SKY_KEY = "ona-kosmos-dreams";
+      function runDreams() {
+        const sky = $("#dreamSky"), form = $("#dreamForm"), count = $("#skyCount");
+        const load = () => { try { return JSON.parse(localStorage.getItem(SKY_KEY) || "[]"); } catch { return []; } };
+        const save = (arr) => { try { localStorage.setItem(SKY_KEY, JSON.stringify(arr.slice(-80))); } catch {} };
+        const palette = ["#7af0ff", "#ffd56a", "#ff7ac8", "#5ef0c2", "#ff9f5a", "#c9a6ff", "#c6f25a"];
+        const place = (d, born) => {
+          const btn = document.createElement("button");
+          btn.type = "button"; btn.className = "dream-star" + (born ? " born" : "");
+          btn.style.left = d.x + "%"; btn.style.top = d.y + "%"; btn.style.color = d.color;
+          btn.setAttribute("aria-label", d.name + ": " + d.dream);
+          const core = document.createElement("span"); core.className = "dream-star-core";
+          const tip = document.createElement("span"); tip.className = "dream-tip";
+          const st = document.createElement("strong"); st.textContent = d.name;
+          const em = document.createElement("em"); em.textContent = d.dream;
+          tip.append(st, em); btn.append(core, tip); sky.appendChild(btn);
+        };
+        let data = load();
+        data.forEach((d) => place(d, false));
+        const plural = (n) => { const m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return "мечта"; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return "мечты"; return "мечт"; };
+        const upd = () => { count.textContent = "На нашем небе " + data.length + " " + plural(data.length); };
+        upd();
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = form.name.value.trim(), dream = form.dream.value.trim();
+          if (!name || !dream) return;
+          const item = { name, dream, x: 8 + Math.random() * 84, y: 10 + Math.random() * 72, color: palette[Math.floor(Math.random() * palette.length)] };
+          data.push(item); save(data); place(item, true); upd(); form.reset(); AudioFX.chime(); toast("Звезда зажжена");
+        });
+      }
+
+      function toast(msg) {
+        const el = $("#toast"); el.textContent = msg; el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 2200);
+      }
+
+      runPreloader();
+      runSpace();
+      runUI();
+      runGalaxy();
+      runQuiz();
+      runPlan();
+      runDreams();
+    })();
+  </script>
+</body>
+</html>
